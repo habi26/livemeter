@@ -10,20 +10,22 @@ import serial
 import sys
 import time
 
-port = serial.Serial(
-    port='/dev/ttyUSB1',
-    baudrate=300,
-    parity=serial.PARITY_EVEN,
-    stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.SEVENBITS,
-    timeout=120
-)
-
-request = bytes.fromhex('2f3f210d0a')
-port.write(request)
-# port = serial.Serial(baudrate=9600)
-
-answere = port.read(size=5864)
-#time.sleep(10)
-print(answere)
-print('Fertig')
+while True:
+    print('Verbindung wird hergestellt ...')
+    port = serial.Serial(
+        port='/dev/ttyUSB2',
+        baudrate=300,
+        parity=serial.PARITY_EVEN,
+        stopbits=serial.STOPBITS_ONE,
+        bytesize=serial.SEVENBITS,
+        timeout=120
+        )
+    print('Ablesung beginnt ...')
+    request = bytes.fromhex('2f3f210d0a')
+    port.write(request)
+    answere = port.read(size=5864)
+    print('Fertig')
+    print(answere)
+    print('Warte 10 Sekunden ...')
+    time.sleep(10)
+    
