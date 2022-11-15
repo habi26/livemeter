@@ -27,4 +27,3 @@ answere = port.read(size=5864)
 #time.sleep(10)
 print(answere)
 print('Fertig')
-erww
