@@ -9,16 +9,19 @@ Created on Tue Nov 15 18:06:37 2022
 import serial
 import sys
 import time
-# import MySQLdb
+import MySQLdb
 import numpy as np
 import pandas as pd
 from io import StringIO
-# db = MySQLdb.connect(
-# 	host='31.171.148.100',
-# 	user='livemetersql',
-# 	passwd='limesql5200',
-# 	db='livemeter'
-# )
+
+
+db = MySQLdb.connect(
+    host='31.171.148.100',
+    user='livemetersql',
+    passwd='limesql5200',
+    db='livemeter'
+)
+cursor = db.cursor()
 
 while True:
     print('Verbindung wird hergestellt ...')
@@ -43,7 +46,15 @@ while True:
     dataStr = dataStr.replace('*kvar', '')
     dataStr = dataStr.replace('   ', '')
     df = pd.read_csv(StringIO(dataStr), sep=' ', skiprows=1, skipfooter=5, header=None, engine='python')
-                              
+    
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    meterID = 123321
+    powerValue = 1.234
+
+    sql = f"INSERT INTO `meter_live_data` (`datetime`, `identity`, `value`) VALUES ('{timestamp}', '{meterID}', '{powerValue}');"
+    cursor.execute(sql)
+    db.commit()
+        
     print(outputStr)
     print('Warte 5 Sekunden ...')
     time.sleep(5)
