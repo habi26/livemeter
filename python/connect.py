@@ -10,6 +10,7 @@ import serial
 import sys
 import time
 import MySQLdb
+import pymysql
 import numpy as np
 import pandas as pd
 from io import StringIO
