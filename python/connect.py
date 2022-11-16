@@ -13,7 +13,7 @@ import time
 while True:
     print('Verbindung wird hergestellt ...')
     port = serial.Serial(
-        port='/dev/ttyUSB2',
+        port='/dev/ttyUSB0',
         baudrate=300,
         parity=serial.PARITY_EVEN,
         stopbits=serial.STOPBITS_ONE,
@@ -25,7 +25,7 @@ while True:
     port.write(request)
     answere = port.read(size=5864)
     print('Fertig')
-    print(answere)
-    print('Warte 10 Sekunden ...')
-    time.sleep(10)
+    print(answere.decode('utf-8'))
+    print('Warte 5 Sekunden ...')
+    time.sleep(5)
     
