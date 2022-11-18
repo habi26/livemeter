@@ -40,14 +40,19 @@ while True:
     outputStr = outputByte.decode('utf-8')
     dataStr = outputStr.replace('(', ' ')
     dataStr = dataStr.replace(')', '')
-    dataStr = dataStr.replace('*kwh','')
+    dataStr = dataStr.replace('*kWh','')
+    dataStr = dataStr.replace('*kW','')
     dataStr = dataStr.replace('*kvar', '')
+    dataStr = dataStr.replace('h','')
     dataStr = dataStr.replace('   ', '')
-    df = pd.read_csv(StringIO(dataStr), sep=' ', skiprows=1, skipfooter=5, header=None, engine='python')
+    dataStr = dataStr.replace('', '')
+    df = pd.read_csv(StringIO(dataStr), sep=' ', skiprows=1, skipfooter=7, header=None, engine='python')
+    df.rename(columns={0: 'obis', 1: 'value'}, inplace=True)
+    df = df.set_index(df['obis'])
     
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-    meterID = 123321
-    powerValue = 1.234
+    meterID = int(df.loc['0.0.0', 'value'])
+    powerValue = df.loc['1.7.0', 'value']
 
     sql = f"INSERT INTO `meter_live_data` (`datetime`, `identity`, `value`) VALUES ('{timestamp}', '{meterID}', '{powerValue}');"
     cursor.execute(sql)
