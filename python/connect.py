@@ -11,6 +11,7 @@ import time
 import MySQLdb
 import pandas as pd
 from io import StringIO
+import datetime as dt
 
 
 db = MySQLdb.connect(
@@ -22,7 +23,7 @@ db = MySQLdb.connect(
 cursor = db.cursor()
 
 while True:
-    print('Verbindung wird hergestellt ...')
+    print(f'{dt.datetime.now()}Verbindung wird hergestellt ...')
     port = serial.Serial(
         port='/dev/ttyUSB0',
         baudrate=300,
@@ -34,8 +35,17 @@ while True:
     print('Ablesung beginnt ...')
     request = bytes.fromhex('2f3f210d0a')
     port.write(request)
-    outputByte = port.read(size=5864)
-    print('Fertig')
+    port = serial.Serial(
+        port='/dev/ttyUSB0',
+        baudrate=300,
+        parity=serial.PARITY_EVEN,
+        stopbits=serial.STOPBITS_ONE,
+        bytesize=serial.SEVENBITS,
+        timeout=120
+        )
+    print('Baudrate auf 9600 umgeschaltet')
+    outputByte = port.read(size=1664)
+    print(f'{dt.datetime.now()}Fertig')
     
     outputStr = outputByte.decode('utf-8')
     dataStr = outputStr.replace('(', ' ')
