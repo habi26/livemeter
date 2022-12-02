@@ -13,6 +13,16 @@ import pandas as pd
 from io import StringIO
 import datetime as dt
 
+# def clean_meterdata_elster(output,data):
+#     return 
+#     data = outputStr.replace('(', ';')
+#     data = data.replace(')', '')
+#     data = data.replace('*kWh','')
+#     data = data.replace('*kW','')
+#     data = data.replace('*kvar', '')
+#     data = data.replace('h','')
+#     data = data.replace('   ', '')
+#     data = data.replace('', '')
 
 db = MySQLdb.connect(
     host='31.171.148.100',
@@ -22,21 +32,18 @@ db = MySQLdb.connect(
 )
 cursor = db.cursor()
 
-# port = serial.Serial(
-#     port='/dev/ttyUSB0',
-#     baudrate=300,
-#     parity=serial.PARITY_EVEN,
-#     stopbits=serial.STOPBITS_ONE,
-#     bytesize=serial.SEVENBITS,
-#     timeout=120
-#     )
 msgEnd = '\x03'
 msgEndByte = msgEnd.encode('utf-8')
+request = '/?!\r\n'
+requestByte = request.encode('utf-8')
+ack = '\x06050\r\n'
+ackByte = ack.encode('utf-8')
 
 while True:
     print('Verbindung wird hergestellt ...')
     timeStart = dt.datetime.now()
     print(timeStart.strftime("%d.%m.%Y %H:%M"))
+    
     port = serial.Serial(
     port='/dev/ttyUSB0',
     baudrate=300,
@@ -45,30 +52,16 @@ while True:
     bytesize=serial.SEVENBITS,
     timeout=20
     )
+    
     print('Ablesung beginnt ...')
-    # request = bytes.fromhex('2f3f210d0a')
-    request = '/?!\r\n'
-    requestByte = request.encode('utf-8')
-    ack = '\x06050\r\n'
-    ackByte = ack.encode('utf-8')
-    
-    # ackByte = bytes.fromhex(ack)
-    
     port.write(requestByte)
-    # time.sleep(0.27)
     answereByte = port.readline()
-    # time.sleep(0.27)
     print(answereByte.decode('utf-8'))
-    # time.sleep(0.27)
     port.write(ackByte)
     time.sleep(0.266)
-    # port.send_break()
     port.baudrate = 9600
-    # port.send_break()
-    # time.sleep(0.27)
     print('Baudrate auf 9600 umgeschaltet')
     outputByte = port.read_until(expected=msgEndByte)
-    # outputByte = port.read(size=8000)
     print(f'{dt.datetime.now()}Fertig')
     
     outputStr = outputByte.decode('utf-8')
