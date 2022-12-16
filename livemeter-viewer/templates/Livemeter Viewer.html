@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!-- saved from url=(0091)https://www.pythonanywhere.com/user/habi26/files/home/habi26/livemeter/templates/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body class="is-preload">{% load static %}
+
+	
+		<title>Livemeter Viewer</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+		<!-- <meta http-equiv="refresh" content="10" /> -->
+        <link rel="stylesheet" href="./Livemeter Viewer_files/{% static" assets="" css="" main.css"="" %}"="">
+            <!-- BOKEH -->
+        <script type="text/javascript" src="./Livemeter Viewer_files/{% static" bokeh-2.4.3.min.js"="" %}"=""></script>
+        <script src="./Livemeter Viewer_files/jquery-3.5.1.js"></script>
+
+        <!-- Script Refresh DIV-->
+        <script>
+        $(document).ready(function(){
+        setInterval(function(){
+                $("#stream").load(window.location.href + " #stream" );
+                $("#streamGauge").load(window.location.href + " #streamGauge" );
+                $("#verbrauch").load(window.location.href + " #verbrauch" );
+        }, 5000);
+        });
+        </script>
+    
+	
+
+		<!-- Header -->
+		<header id="header" style="margin-top: 850px;margin-bottom:50px;">
+			<h1>Livemeter</h1>
+			<p>Messwerte in Echtzeit</p>
+		</header>
+        <div style="background-color:rgba(0,0,0,0.5); padding-left: 20px; padding-right: 20px; position: relative;">
+            <div id="stream" style="position: relative"><div id="stream" style="position: relative">
+                <!--<form method="post" enctype="multipart/form-data">-->
+                <h2 style="padding-top: 20px">Aktueller Leistungsbezug</h2>
+                    {% csrf_token %}
+                    <!--<button name="reload" id="reload-button">Reload</button>-->
+                    <br>
+                    <!--<img src="{% static "gauge.png" %}"-->
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                    <iframe class="gauge" id="streamGauge" scrolling="No" width="700" style="height: 425px;border:none;" src="./Livemeter Viewer_files/saved_resource.html">
+                    </iframe>
+                    </div>
+                    <table style="margin-left:auto;margin-right:auto;">
+                        <tbody><tr>
+                            <td style="padding-right:30px">Zählernummer: </td>
+                            <td>{{ meterID }}</td>
+                        </tr>
+                        <tr>
+                            <td>Wirkarbeit: </td>
+                            <td>{{ value }} kW</td>
+                        </tr>
+                        <tr>
+                            <td>Letzte Auslesung: </td>
+                            <td>{{ timestamp|date:"d.m.Y, H:i:s" }}</td>
+                        </tr>
+                    </tbody></table>
+                <br>
+            </div></div>
+<style>
+@media screen and (max-width: 600px) {
+  iframe.plot {
+    height: 200px !important;
+  }
+}
+</style>
+
+            <div id="lastprofil" style="position: static">
+                <h2 style="padding-top: 20px">Lastprofil</h2>
+                <div id="lpPlot" style="display: flex; align-items: center; justify-content: center;">
+                    <iframe class="plot" id="streamTS" width="700" scrolling="No" style="height: 425px;border:none;" src="./Livemeter Viewer_files/saved_resource(1).html">
+                    </iframe>
+                </div>
+                <br>
+                <div id="verbrauch"><div id="verbrauch">
+                    <table style="margin-left:auto;margin-right:auto;">
+                      <tbody><tr>
+                        <td style="padding-right:30px">Tagesverbrauch: </td>
+                        <td>{{ wDay|floatformat }} kWh</td>
+                      </tr>
+                      <tr>
+                        <td>Zeitbereich: </td>
+                        <td>{{ trStart|date:"d.m.Y, H:i" }} - {{ trEnd|date:"d.m.Y, H:i" }}</td>
+                      </tr>
+                    </tbody></table>
+                    <br>
+                </div></div>
+            </div>
+
+		<!-- Footer -->
+			<footer id="footer" style="padding: 20px; position: static">
+                <ul class="icons">
+					<!--<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>-->
+					<!--<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>-->
+					<li><a href="https://github.com/habi26/livemeter.git" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+					<!--<li><a href="mailto:habermacher.michael@bluewin.ch" class="icon fa-envelope"><span class="label">Email</span></a></li>-->
+				</ul>
+
+				<ul class="copyright">
+					<li>© Livemeter</li><li>Credits: Michael Habermacher</li><li>Template: Eventually by HTML5 UP</li><li>Bilder: IBB Energie AG</li>
+				</ul>
+			</footer>
+		<!-- Scripts -->
+        <script src="./Livemeter Viewer_files/{% static" assets="" js="" main.js"="" %}"=""></script>
+	
+</div></body></html>
